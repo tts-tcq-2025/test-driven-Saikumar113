@@ -19,12 +19,12 @@ the first line is optional. all existing scenarios should still be supported
 StringCalculator
 The StringCalculator is a utility designed to parse a string input containing numbers separated by delimiters, then compute and return their sum. The calculator must support flexible delimiter formats, input validation, and handle edge cases gracefully.
 
-Basic Addition
-Handling Multiple Numbers
-Support for Newline as Delimiter
-Support for Custom Delimiters
-Negative Number Handling
-Ignoring Large Numbers
+- Basic Addition
+- Handling Multiple Numbers
+- Support for Newline as Delimiter
+- Support for Custom Delimiters
+- Negative Number Handling
+- Ignoring Large Numbers
 
 ## Tasks
 
