@@ -1,4 +1,4 @@
-# 🧮 StringCalculator Test Specification
+# StringCalculator Test Specification
 
 | **Test ID** | **Test Description** | **Input String** | **Expected Output / Behavior** | **Notes** |
 |--------------|----------------------|------------------|--------------------------------|------------|
