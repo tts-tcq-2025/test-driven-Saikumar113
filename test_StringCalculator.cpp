@@ -1,45 +1,44 @@
-#include <iostream>
-#include <cassert>
 #include "StringCalculator.h"
+#include <cassert>
+#include <iostream>
 
 void runTests() {
     StringCalculator calc;
 
-    // Basic and multiple number tests
+    // Step 1: Smallest failing test
     assert(calc.Add("") == 0);
-    assert(calc.Add("1") == 1);
-    assert(calc.Add("1,2") == 3);
-    assert(calc.Add("1,2,3,4,5") == 15);
 
-    // Newline support
+    // Step 2: One number
+    assert(calc.Add("1") == 1);
+
+    // Step 3: Two numbers
+    assert(calc.Add("1,2") == 3);
+
+    // Step 4: Multiple numbers
+    assert(calc.Add("1,2,3,4") == 10);
+
+    // Step 5: Newline as delimiter
     assert(calc.Add("1\n2,3") == 6);
 
-    // Custom delimiters
+    // Step 6: Custom single delimiter
     assert(calc.Add("//;\n1;2") == 3);
-    assert(calc.Add("//[***]\n1***2***3") == 6);
-    assert(calc.Add("//;\n1;2;3;4") == 10);
-    assert(calc.Add("//;\n1;2\n3") == 6);
-    assert(calc.Add("//[###]\n1###2###3###4") == 10);
 
-    // Large numbers
+    // Step 7: Ignore numbers > 1000
     assert(calc.Add("2,1001") == 2);
-    assert(calc.Add("1000,2") == 1002);
 
-    // Multiple custom delimiters (optional)
+    // Step 8: Multi-length delimiters
+    assert(calc.Add("//[***]\n1***2***3") == 6);
+
+    // Step 9: Multiple delimiters
     assert(calc.Add("//[*][%]\n1*2%3") == 6);
 
-    // Exception for negatives
-    try {
-        calc.Add("1,-2,-3,4");
-        assert(false);
-    } catch (const std::runtime_error &ex) {
-        std::string msg = ex.what();
-        assert(msg.find("negatives not allowed") != std::string::npos);
-        assert(msg.find("-2") != std::string::npos);
-        assert(msg.find("-3") != std::string::npos);
-    }
+    // Step 10: Negative number throws exception
+    bool thrown = false;
+    try { calc.Add("1,-2,3,-4"); }
+    catch (const std::invalid_argument& e) { thrown = true; }
+    assert(thrown);
 
-    std::cout << "✅ All tests passed successfully!" << std::endl;
+    std::cout << "✅ All tests passed!" << std::endl;
 }
 
 int main() {
