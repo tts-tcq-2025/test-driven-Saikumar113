@@ -25,13 +25,13 @@ void runTests() {
     assert(calc.Add("2,1001") == 2);
     assert(calc.Add("1000,2") == 1002);
 
-    // Multiple custom delimiters (optional extended)
+    // Multiple custom delimiters (optional)
     assert(calc.Add("//[*][%]\n1*2%3") == 6);
 
-    // Exception for negative numbers
+    // Exception for negatives
     try {
         calc.Add("1,-2,-3,4");
-        assert(false); // should not reach here
+        assert(false);
     } catch (const std::runtime_error &ex) {
         std::string msg = ex.what();
         assert(msg.find("negatives not allowed") != std::string::npos);
