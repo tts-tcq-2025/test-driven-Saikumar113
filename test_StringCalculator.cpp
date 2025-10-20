@@ -1,7 +1,7 @@
-#include "StringCalculator.h"
-
 #include <cassert>
 #include <iostream>
+
+#include "StringCalculator.h"
 
 void runTests() {
   StringCalculator calc;
