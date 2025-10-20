@@ -1,4 +1,4 @@
-#include "StringCalculator.hpp"
+#include "include/StringCalculator.hpp"
 
 #include <algorithm>
 #include <regex>
