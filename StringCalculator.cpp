@@ -2,6 +2,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <regex>
+#include <algorithm>
 
 bool StringCalculator::startsWith(const std::string& s, const std::string& prefix) {
     return s.rfind(prefix, 0) == 0;
@@ -13,21 +14,24 @@ std::string StringCalculator::extractDelimiterSection(const std::string& input) 
     return input.substr(2, pos - 2);
 }
 
-std::vector<std::string> StringCalculator::parseDelimiters(const std::string& section) {
-    if (section.empty()) return {",", "\n"};
-
-    std::vector<std::string> delimiters;
+std::vector<std::string> StringCalculator::extractBracketedDelimiters(const std::string& section) {
+    std::vector<std::string> result;
     std::regex bracketed("\\[(.*?)\\]");
     std::smatch match;
     std::string temp = section;
 
     while (std::regex_search(temp, match, bracketed)) {
-        delimiters.push_back(match[1]);
+        result.push_back(match[1]);
         temp = match.suffix();
     }
+    return result;
+}
 
-    if (delimiters.empty()) delimiters.push_back(std::string(1, section[0]));
-    return delimiters;
+std::vector<std::string> StringCalculator::parseDelimiters(const std::string& section) {
+    if (section.empty()) return {",", "\n"};
+    auto delims = extractBracketedDelimiters(section);
+    if (delims.empty()) delims.push_back(std::string(1, section[0]));
+    return delims;
 }
 
 std::string StringCalculator::normalizeInput(const std::string& input, const std::vector<std::string>& delimiters) {
@@ -53,24 +57,28 @@ std::vector<int> StringCalculator::extractNumbers(const std::string& input) {
     return nums;
 }
 
+std::string StringCalculator::joinNegatives(const std::vector<int>& negatives) {
+    std::ostringstream oss;
+    for (size_t i = 0; i < negatives.size(); ++i) {
+        if (i > 0) oss << ",";
+        oss << negatives[i];
+    }
+    return oss.str();
+}
+
 void StringCalculator::validateNegatives(const std::vector<int>& numbers) {
     std::vector<int> negatives;
-    for (int n : numbers) if (n < 0) negatives.push_back(n);
+    std::copy_if(numbers.begin(), numbers.end(), std::back_inserter(negatives),
+                 [](int n) { return n < 0; });
 
-    if (!negatives.empty()) {
-        std::ostringstream oss;
-        oss << "negatives not allowed: ";
-        for (size_t i = 0; i < negatives.size(); ++i) {
-            if (i > 0) oss << ",";
-            oss << negatives[i];
-        }
-        throw std::invalid_argument(oss.str());
-    }
+    if (!negatives.empty())
+        throw std::invalid_argument("negatives not allowed: " + joinNegatives(negatives));
 }
 
 int StringCalculator::sumNumbers(const std::vector<int>& numbers) {
     int sum = 0;
-    for (int n : numbers) if (n <= 1000) sum += n;
+    for (int n : numbers)
+        if (n <= 1000) sum += n;
     return sum;
 }
 
